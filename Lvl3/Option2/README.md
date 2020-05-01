@@ -1,5 +1,8 @@
 # Project Details 
 
+[Link To Jenkins Jobs] (http://100.24.19.122:8080/job/ECS-Deploy/)
+
+
 ## Infra Setup
 
 ### Jenkins Server on Amazon Linux 2 (EC2)

@@ -25,6 +25,6 @@ module "ecs-fargate-service" {
 
 module "ecs-fargate-task-definition" {
   source       = "./modules/ecs_fargate_task_definition/"
-  ecrrepo = var.ecrrepo
+
 }
 

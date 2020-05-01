@@ -33,8 +33,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy_attach
 resource "aws_ecs_task_definition" "td" {
   family = "td"
 
-  container_definitions = file("service.json")
-
+  container_definitions = file("modules/ecs_fargate_task_definition/service.json")
 task_role_arn         = aws_iam_role.ecs_task_execution_role.arn
 execution_role_arn    = aws_iam_role.ecs_task_execution_role.arn
 network_mode          = "awsvpc"

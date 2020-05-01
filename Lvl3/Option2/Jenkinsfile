@@ -8,44 +8,25 @@ pipeline {
         REPO_URL = 'https://github.com/rahulvadisetty91/devops-assesment.git'
         BUILD_NAME = "nginx" + ":$BUILD_NUMBER"
         ECR_REPO = "840955746374.dkr.ecr.us-east-1.amazonaws.com/web"
-        ECR_REPO2 = "840955746374.dkr.ecr.us-east-1.amazonaws.com/web"+":$BUILD_NUMBER"
-        //REGION = "us-east-1"
-        //AWS_ACCESS_KEY_ID = credentials('awskey')
-        //TF_WORKSPACE = 'dev' //Sets the Terraform Workspace
-        TF_IN_AUTOMATION = 'true'
-        //AWS_ACCESS_KEY_ID = credentials('awsid')
-        AWS_ACCESS_KEY_ID = 'AKIA4HTG6LBDJHJQC3UE'
-        AWS_SECRET_ACCESS_KEY = credentials('awskey')
-         AWS_DEFAULT_REGION = "us-east-1"
+        ECR_REPO2 = "840955746374.dkr.ecr.us-east-1.amazonaws.com/web"+"nginx:$BUILD_NUMBER"
+	SCRIPT = "nginx:$BUILD_NUMBER"
+        AWS_DEFAULT_REGION = "us-east-1"
+	NGINX = "nginx"
     }
-    //git credentialsId: 'GITCRED', url: 'https://github.com/rv91/devops-assesment.git'
        triggers {
  	    pollSCM('* * * * *')
  	}
     
     stages {
         
-        //stage('CleanWorkspace') {
-        //    steps {
-        //        cleanWs()
-        //    }
-        //}
         
-        //stage('Git Checkout') {
-        //    agent any 
-        //    steps {
-	//           git credentialsId: 'GITCRED', url: 'https://github.com/rahulvadisetty91/devops-assesment.git'    
-	//           sh "ls -l"
-        //    }
-        //}
+       
         
         stage('Image Build') {
             agent any
             steps {
-                //sh "docker system prune -af"
                 
                 dir('./Lvl3/Option2/Docker-build/') {
-                    // some block
                     sh "ls -la"
                      
                      sh "sudo docker build -t ${BUILD_NAME} ."
@@ -66,8 +47,8 @@ pipeline {
                     sh 'echo ${ECRPASS} | sudo docker login --username AWS --password-stdin ${ECR_REPO}'
                 }
                 
-                sh "sudo docker tag ${BUILD_NAME} ${ECR_REPO}:${BUILD_NUMBER}"
-                sh "sudo docker push ${ECR_REPO}:${BUILD_NUMBER}"
+                sh "sudo docker tag ${BUILD_NAME} ${ECR_REPO}:${NGINX}${BUILD_NUMBER}"
+                sh "sudo docker push ${ECR_REPO}:${NGINX}${BUILD_NUMBER}"
                 
             }
         }
@@ -78,7 +59,7 @@ pipeline {
                
                dir('/var/lib/jenkins/workspace/terraform-ecs/') {
                         
-                        sh "sudo bash script.sh ${BUILD_NUMBER}"
+                        sh "sudo bash script.sh ${SCRIPT}"
                     
                 } 
                 
